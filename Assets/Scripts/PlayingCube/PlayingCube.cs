@@ -33,14 +33,16 @@ namespace PlayingCube
 
         private void CheckCubeSide()
         {
+            Stack<CubeSide> triggeredSides = new Stack<CubeSide>();
             foreach (var side in _cubeSides)
             {
                 RaycastHit hit;
-                if (!Physics.Raycast(_transform.position, side.transform.forward, out hit)) continue;
+                if (!Physics.Raycast(_transform.position, 
+                    side.transform.forward, out hit)) continue;
                 if (!hit.transform.TryGetComponent(out CubeSidesCheckPoint _)) continue;
-                print(side.SideNumber);
-                Destroy(this);
+                triggeredSides.Push(side);
             }
+            GlobalEventManager.SendOnPlayerMovementStart(triggeredSides.Peek().SideNumber);
         }
 
         private void OnTriggerEnter(Collider other)

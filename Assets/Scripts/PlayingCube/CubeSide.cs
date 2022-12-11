@@ -1,6 +1,9 @@
 using UnityEngine;
 
-public class CubeSide : MonoBehaviour
+namespace PlayingCube
 {
-    public byte SideNumber;
+    public class CubeSide : MonoBehaviour
+    {
+        public byte SideNumber;
+    }
 }
