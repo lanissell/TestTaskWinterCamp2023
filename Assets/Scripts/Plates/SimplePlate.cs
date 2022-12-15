@@ -2,7 +2,7 @@
 {
     public class SimplePlate: Plate
     {
-        public override bool PlateHaveEffect()
+        public override bool ActivatePlateEffect()
         {
             return false;
         }

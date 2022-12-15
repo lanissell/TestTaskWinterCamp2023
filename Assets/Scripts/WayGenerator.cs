@@ -23,10 +23,12 @@ public class WayGenerator : MonoBehaviour
     private int _movingBackSteps;
     [SerializeField]
     private float _plateMovingBackRate;
+    private Transform _transform;
 
     private void Awake()
     {
         GenerateWayByChildPositions();
+        _transform = transform;
     }
 
     private void GenerateWayByChildPositions()
@@ -36,13 +38,13 @@ public class WayGenerator : MonoBehaviour
         {
             int plateNum = i;
             Plate plate = Instantiate(ChosePlatePrefab(ref plateNum), 
-                children[i].position, Quaternion.identity);
+                children[i].position, Quaternion.identity, _transform);
             plate.PlateNum = plateNum;
             Plates.Add(plate);
             Destroy(children[i].gameObject);
         }
     }
-    
+
     private Plate ChosePlatePrefab(ref int plateNum)
     {
         Plate platePrefab = _simplePlate;

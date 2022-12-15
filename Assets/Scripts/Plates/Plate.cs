@@ -30,7 +30,7 @@ namespace Plates
                 FirstOrDefault(posTransform => posTransform.childCount == 0);
         }
         
-        public abstract bool PlateHaveEffect();
+        public abstract bool ActivatePlateEffect();
 
     }
 }
