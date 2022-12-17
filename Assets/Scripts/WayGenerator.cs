@@ -27,21 +27,21 @@ public class WayGenerator : MonoBehaviour
 
     private void Awake()
     {
-        GenerateWayByChildPositions();
         _transform = transform;
+        GenerateWayByChildPositions();
     }
 
     private void GenerateWayByChildPositions()
     {
-        Transform[] children = transform.GetComponentsInChildren<Transform>();
-        for (int i = 1; i < children.Length; i++)
+        Transform[] childrenTransforms = _transform.GetComponentsInChildren<Transform>();
+        for (int i = 1; i < childrenTransforms.Length; i++)
         {
             int plateNum = i;
             Plate plate = Instantiate(ChosePlatePrefab(ref plateNum), 
-                children[i].position, Quaternion.identity, _transform);
+                childrenTransforms[i].position, Quaternion.identity, _transform);
             plate.PlateNum = plateNum;
             Plates.Add(plate);
-            Destroy(children[i].gameObject);
+            Destroy(childrenTransforms[i].gameObject);
         }
     }
 

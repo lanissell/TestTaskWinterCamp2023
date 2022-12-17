@@ -12,15 +12,11 @@ namespace Player
 
         private void Awake()
         {
-            GlobalEventManager.OnPlayerStop += AddMovesCount;
             GlobalEventManager.OnAddingStepActive += AddBonusCount;
             GlobalEventManager.OnMovingBackActive += AddFineCount;
         }
 
-        private void AddMovesCount()
-        {
-            if (CanPlay) MovesCount++;
-        }
+        public void AddMovesCount() => MovesCount++;
 
         private void AddBonusCount()
         {

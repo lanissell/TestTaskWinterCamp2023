@@ -27,6 +27,30 @@ ModelImporter:
   - first:
       74: -8317808031555042725
     second: Terrain|Terrain|Take 001|BaseLayer.003
+  - first:
+      74: 3023031173256083896
+    second: Terrain|Terrain|Terrain|Clouds|Take 001|BaseLayer
+  - first:
+      74: 2266782449015524294
+    second: Terrain|Terrain|Terrain|Clouds|Take 001|BaseLayer.001
+  - first:
+      74: -5860106950518923630
+    second: Terrain|Terrain|Terrain|Clouds|Take 001|BaseLayer.002
+  - first:
+      74: 818919477315691408
+    second: Terrain|Terrain|Terrain|Clouds|Take 001|BaseLayer.003
+  - first:
+      74: 4096932513541611796
+    second: Terrain|Terrain|Terrain|Terrain|Take 001|BaseLayer
+  - first:
+      74: -1236015296929566007
+    second: Terrain|Terrain|Terrain|Terrain|Take 001|BaseLayer.001
+  - first:
+      74: -111055543178175558
+    second: Terrain|Terrain|Terrain|Terrain|Take 001|BaseLayer.002
+  - first:
+      74: -2775750427399718489
+    second: Terrain|Terrain|Terrain|Terrain|Take 001|BaseLayer.003
   externalObjects:
   - first:
       type: UnityEngine:Material

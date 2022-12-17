@@ -7,34 +7,53 @@ namespace Player
     {
         [HideInInspector]
         public List<PlayerStats> Players;
+        [HideInInspector]
+        public List<string> Names;
         [SerializeField]
         private Plate _startPlate;
         [SerializeField]
         private PlayerStats _playerPrefab;
-        [SerializeField]
-        private int _playersCount;
         [SerializeField]
         private Color[] _newPlayerColors;
 
         private void Start()
         {
             Players = new List<PlayerStats>();
-            CreatePlayers();
+            GlobalEventManager.OnStartButtonClick += CreatePlayers;
+        }
+
+        private void CreatePlayers(List<string> names)
+        {
+            GlobalEventManager.OnStartButtonClick -= CreatePlayers;
+            int playersCount = names.Count;
+            int colorIndex = 0;
+            for (int i = 0; i < playersCount; i++)
+            {
+                var newPlayer = CreateOnePlayer();
+                if (newPlayer.TryGetComponent(out Renderer playerRenderer)) SetColor(ref colorIndex, playerRenderer);
+                Players.Add(newPlayer);
+                SetPlayerName(i, names[i]);
+            }
             Players[0].CanPlay = true;
         }
 
-        private void CreatePlayers()
+        private PlayerStats CreateOnePlayer()
         {
-            int colorIndex = 0;
-            for (int i = 0; i < _playersCount; i++)
+            Transform emptyPoint = _startPlate.GetEmptyPosition();
+            PlayerStats newPlayer = Instantiate(_playerPrefab, emptyPoint.position, 
+                Quaternion.identity);
+            newPlayer.transform.parent = emptyPoint;
+            return newPlayer;
+        }
+
+        private void SetPlayerName(int playerIndex, string name)
+        {
+            if (name.Equals(""))
             {
-                Transform emptyPoint = _startPlate.GetEmptyPosition();
-                PlayerStats newPlayer = Instantiate(_playerPrefab, emptyPoint.position, 
-                    Quaternion.identity);
-                newPlayer.transform.parent = emptyPoint;
-                if (newPlayer.TryGetComponent(out Renderer playerRenderer)) SetColor(ref colorIndex, playerRenderer);
-                Players.Add(newPlayer);
+                Players[playerIndex].Name = $"Player {playerIndex + 1}";
+                return;
             }
+            Players[playerIndex].Name = name;
         }
 
         private void SetColor(ref int colorIndex, Renderer playerRenderer)

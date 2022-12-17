@@ -314,7 +314,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _checkCubeVelocityInterval: 0.1
-  _velocityThreshold: 0.1
+  _velocityThreshold: 0.05
   _cubeSides:
   - {fileID: 6845425689290020437}
   - {fileID: 2904192125321046047}

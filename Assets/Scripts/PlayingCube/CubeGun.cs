@@ -6,10 +6,16 @@ namespace PlayingCube
 {
     public class CubeGun : MonoBehaviour
     {
-        [SerializeField] private float _maxForce;
-        [SerializeField] private float _minForce;
-        [SerializeField] private Transform _cubeSpawnPoint;
-        [SerializeField] private GameObject _cubePrefab;
+        [SerializeField] 
+        private float _maxForce;
+        [SerializeField] 
+        private float _minForce;
+        [SerializeField] 
+        private float _rotationForce;
+        [SerializeField] 
+        private Transform _cubeSpawnPoint;
+        [SerializeField] 
+        private GameObject _cubePrefab;
         private bool _isCanShoot;
         private GameObject _cube;
 
@@ -34,6 +40,8 @@ namespace PlayingCube
             if (!_cube.TryGetComponent(out Rigidbody cubeRigidbody)) return;
             float force = Random.Range(_minForce, _maxForce);
             cubeRigidbody.AddForce(_cubeSpawnPoint.forward * force, ForceMode.VelocityChange);
+            var rotationDirection = Vector3.back + Vector3.up;
+            cubeRigidbody.AddTorque(rotationDirection * (_rotationForce * force));
         }
 
         private void SetCanShootTrue() => _isCanShoot = true;

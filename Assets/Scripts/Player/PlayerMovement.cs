@@ -8,6 +8,10 @@ namespace Player
     {
         [SerializeField]
         private float _distanceThreshold;
+        [SerializeField]
+        private float _movementSpeed;
+        [SerializeField]
+        private float _movementHeight;
 
         private int _currentPositionIndex = 0;
         private WayGenerator _generator;
@@ -58,11 +62,22 @@ namespace Player
             float startTime = Time.time;
             while (Vector3.Distance(_transform.position, targetPosition) > _distanceThreshold)
             {
-                _transform.position = Vector3.Lerp(startPosition, targetPosition, 
-                    Time.time - startTime);
+                _transform.position = GetBezierPoint(startPosition, targetPosition, 
+                    (Time.time - startTime) *_movementSpeed);
                 yield return new WaitForEndOfFrame();
             }
         }
+ 
+        private Vector3 GetBezierPoint(Vector3 startPoint, Vector3 endPoint, float time)
+        {
+            var centerPoint = (startPoint + endPoint) / 2 + Vector3.up * _movementHeight;
+            var startCenterSegment = Vector3.Lerp(startPoint, centerPoint, time);
+            var centerEndSegment = Vector3.Lerp(centerPoint, endPoint, time);
+            var bezierPoint = Vector3.Lerp(startCenterSegment, centerEndSegment, time);
+            return bezierPoint;
+        }
+
+        
 
     }
 }

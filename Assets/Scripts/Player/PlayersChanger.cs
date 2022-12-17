@@ -10,14 +10,16 @@ namespace Player
         
         private void Start()
         {
-            GlobalEventManager.OnPlayerStop += ChangeCurrentPlayer;
             _playersCreator = GetComponent<PlayersCreator>();
+            GlobalEventManager.OnPlayerStop += ChangeCurrentPlayer;
         }
 
         private void ChangeCurrentPlayer()
         {
             var players = _playersCreator.Players;
-            players[_currentPlayerIndex].CanPlay = false;
+            var currentPlayer = players[_currentPlayerIndex];
+            currentPlayer.AddMovesCount();
+            currentPlayer.CanPlay = false;
             _currentPlayerIndex++;
             if (_currentPlayerIndex > players.Count - 1) _currentPlayerIndex = 0;
             players[_currentPlayerIndex].CanPlay = true;
