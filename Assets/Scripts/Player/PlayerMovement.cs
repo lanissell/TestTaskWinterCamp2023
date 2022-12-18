@@ -47,6 +47,10 @@ namespace Player
             _currentPositionIndex = ValidatePositionIndex(_currentPositionIndex + plateCount);
             if (_generator.Plates[_currentPositionIndex].ActivatePlateEffect()) yield break;
             GlobalEventManager.SendOnPlayerStop();
+            
+            if (_currentPositionIndex != _generator.Plates.Count - 1) yield break;
+            GlobalEventManager.SendOnPlayerFinished(_playerStats);
+            GlobalEventManager.OnPlayerMovementStart -= StartMoveCoroutine;
         }
 
         private int ValidatePositionIndex(int index)

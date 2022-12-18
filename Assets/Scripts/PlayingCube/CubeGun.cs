@@ -24,6 +24,7 @@ namespace PlayingCube
             _isCanShoot = true;
             GlobalEventManager.OnAddingStepActive += SetCanShootTrue;
             GlobalEventManager.OnPlayerStop += SetCanShootTrue;
+            GlobalEventManager.OnAllPlayersFinished += DestroyGun;
         }
 
         private void Update()
@@ -46,10 +47,12 @@ namespace PlayingCube
 
         private void SetCanShootTrue() => _isCanShoot = true;
 
-        private void OnDestroy()
+        private void DestroyGun()
         {
             GlobalEventManager.OnAddingStepActive -= SetCanShootTrue;
             GlobalEventManager.OnPlayerStop -= SetCanShootTrue;
+            GlobalEventManager.OnAllPlayersFinished -= DestroyGun;
+            Destroy(gameObject);
         }
 
     }

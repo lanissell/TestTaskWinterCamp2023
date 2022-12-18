@@ -49,5 +49,6 @@ namespace PlayingCube
             if (!other.TryGetComponent(out Land _)) return;
             StartCoroutine(WaitCubeStop());
         }
+
     }
 }

@@ -7,8 +7,6 @@ namespace Player
     {
         [HideInInspector]
         public List<PlayerStats> Players;
-        [HideInInspector]
-        public List<string> Names;
         [SerializeField]
         private Plate _startPlate;
         [SerializeField]
@@ -46,14 +44,14 @@ namespace Player
             return newPlayer;
         }
 
-        private void SetPlayerName(int playerIndex, string name)
+        private void SetPlayerName(int playerIndex, string playerName)
         {
-            if (name.Equals(""))
+            if (playerName.Equals(""))
             {
                 Players[playerIndex].Name = $"Player {playerIndex + 1}";
                 return;
             }
-            Players[playerIndex].Name = name;
+            Players[playerIndex].Name = playerName;
         }
 
         private void SetColor(ref int colorIndex, Renderer playerRenderer)
@@ -62,6 +60,8 @@ namespace Player
             colorIndex ++;
             if (colorIndex > _newPlayerColors.Length - 1) colorIndex = 0;
         }
+        
+        
 
     }
 }

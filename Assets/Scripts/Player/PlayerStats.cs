@@ -14,8 +14,9 @@ namespace Player
         {
             GlobalEventManager.OnAddingStepActive += AddBonusCount;
             GlobalEventManager.OnMovingBackActive += AddFineCount;
+            GlobalEventManager.OnPlayerFinished += UnsubscribeOnEvents;
         }
-
+        
         public void AddMovesCount() => MovesCount++;
 
         private void AddBonusCount()
@@ -28,7 +29,15 @@ namespace Player
         private void AddFineCount()
         {
             if (CanPlay) FineCount++;
-        } 
+        }
+
+        private void UnsubscribeOnEvents(PlayerStats stats)
+        {
+            if (stats != this) return;
+            GlobalEventManager.OnAddingStepActive -= AddBonusCount;
+            GlobalEventManager.OnMovingBackActive -= AddFineCount;
+            GlobalEventManager.OnPlayerFinished -= UnsubscribeOnEvents;
+        }
 
     }
 }
