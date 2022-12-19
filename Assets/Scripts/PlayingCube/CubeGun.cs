@@ -1,5 +1,6 @@
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace PlayingCube
@@ -12,8 +13,8 @@ namespace PlayingCube
         private float _minForce;
         [SerializeField] 
         private float _rotationForce;
-        [SerializeField] 
-        private Transform _cubeSpawnPoint;
+        [FormerlySerializedAs("_cubeSpawnPoint")] [SerializeField] 
+        private Transform[] _cubeSpawnPoints;
         [SerializeField] 
         private GameObject _cubePrefab;
         private bool _isCanShoot;
@@ -29,18 +30,19 @@ namespace PlayingCube
 
         private void Update()
         {
-            if (!(Input.GetMouseButtonDown(0) && _isCanShoot)) return;
+            if (!((Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space)) && _isCanShoot)) return;
             if (!_cube.IsUnityNull()) Destroy(_cube.gameObject);
             _isCanShoot = false;
-            _cube = Instantiate(_cubePrefab, _cubeSpawnPoint.position, _cubeSpawnPoint.rotation);
-            PushCube();
+            var spawnPoint = _cubeSpawnPoints[Random.Range(0, _cubeSpawnPoints.Length)];
+            _cube = Instantiate(_cubePrefab, spawnPoint.position, spawnPoint.rotation);
+            PushCube(spawnPoint.forward);
         }
 
-        private void PushCube()
+        private void PushCube(Vector3 direction)
         {
             if (!_cube.TryGetComponent(out Rigidbody cubeRigidbody)) return;
             float force = Random.Range(_minForce, _maxForce);
-            cubeRigidbody.AddForce(_cubeSpawnPoint.forward * force, ForceMode.VelocityChange);
+            cubeRigidbody.AddForce(direction * force, ForceMode.VelocityChange);
             var rotationDirection = Vector3.back + Vector3.up;
             cubeRigidbody.AddTorque(rotationDirection * (_rotationForce * force));
         }

@@ -10,6 +10,7 @@ public static class GlobalEventManager
         public static event Action OnAddingStepActive;
         public static event Action OnMovingBackActive;
         public static event Action<PlayerStats> OnPlayerFinished;
+        public static event Action<PlayerStats> OnPlayerChanged;
         public static event Action OnAllPlayersFinished;
         
         public static void SendOnStartButtonClick(List<string> names) => 
@@ -29,6 +30,9 @@ public static class GlobalEventManager
         
         public static void SendOnPlayerFinished(PlayerStats playerStats) => 
                 OnPlayerFinished?.Invoke(playerStats);
+        
+        public static void SendOnPlayerChanged(PlayerStats playerStats) => 
+                OnPlayerChanged?.Invoke(playerStats);
         
         public static void SendOnAllPlayersFinished() => 
                 OnAllPlayersFinished?.Invoke();

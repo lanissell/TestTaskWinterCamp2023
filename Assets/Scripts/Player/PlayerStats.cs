@@ -9,6 +9,7 @@ namespace Player
         public int MovesCount = 0;
         public int BonusCount = 0;
         public int FineCount = 0;
+        public Color Color;
 
         private void Awake()
         {

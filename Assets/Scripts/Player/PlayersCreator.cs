@@ -28,10 +28,15 @@ namespace Player
             for (int i = 0; i < playersCount; i++)
             {
                 var newPlayer = CreateOnePlayer();
-                if (newPlayer.TryGetComponent(out Renderer playerRenderer)) SetColor(ref colorIndex, playerRenderer);
+                if (newPlayer.TryGetComponent(out Renderer playerRenderer))
+                {
+                    newPlayer.Color = _newPlayerColors[colorIndex];
+                    SetColor(ref colorIndex, playerRenderer);
+                }
                 Players.Add(newPlayer);
                 SetPlayerName(i, names[i]);
             }
+            GlobalEventManager.SendOnPlayerChanged(Players[0]);
             Players[0].CanPlay = true;
         }
 

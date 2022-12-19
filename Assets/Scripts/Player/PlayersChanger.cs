@@ -18,11 +18,9 @@ namespace Player
         private void ChangeCurrentPlayer()
         {
             if (_playersCreator.Players.Count == 0) return;
-            var currentPlayer = _playersCreator.Players[GetCurrentPlayerIndex()];
-            currentPlayer.AddMovesCount();
-            currentPlayer.CanPlay = false;
+            DeactivatePlayer(_playersCreator.Players[GetCurrentPlayerIndex()]);
             _currentPlayerIndex++;
-            _playersCreator.Players[GetCurrentPlayerIndex()].CanPlay = true;
+            ActivatePlayer(_playersCreator.Players[GetCurrentPlayerIndex()]);
         }
 
         private int GetCurrentPlayerIndex()
@@ -31,6 +29,18 @@ namespace Player
                 || _currentPlayerIndex < 0) 
                 _currentPlayerIndex = 0;
             return _currentPlayerIndex;
+        }
+
+        private void DeactivatePlayer(PlayerStats player)
+        {
+            player.AddMovesCount();
+            player.CanPlay = false;
+        }
+
+        private void ActivatePlayer(PlayerStats player)
+        {
+            player.CanPlay = true;
+            GlobalEventManager.SendOnPlayerChanged(player);
         }
 
         private void RemovePlayerFromList(PlayerStats playerStats)

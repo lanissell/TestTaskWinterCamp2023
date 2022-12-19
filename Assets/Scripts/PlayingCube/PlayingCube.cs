@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace PlayingCube
@@ -33,15 +34,17 @@ namespace PlayingCube
 
         private void CheckCubeSide()
         {
+            List<(CubeSide, float)> angles = new List<(CubeSide, float)>();
             foreach (var side in _cubeSides)
             {
-                RaycastHit hit;
+                Vector3 sideForward = side.transform.forward;
                 if (!Physics.Raycast(_transform.position, 
-                    side.transform.forward, out hit)) continue;
+                    sideForward, out RaycastHit hit)) continue;
                 if (!hit.transform.TryGetComponent(out CubeSidesCheckPoint _)) continue;
-                GlobalEventManager.SendOnPlayerMovementStart(side.SideNumber);
-                return;
+                angles.Add((side, Vector3.Angle(-sideForward, hit.normal)));
             }
+            var sideWithMinAngle = angles.OrderBy(a => a.Item2).ToArray()[0].Item1;
+            GlobalEventManager.SendOnPlayerMovementStart(sideWithMinAngle.SideNumber);
         }
 
         private void OnTriggerEnter(Collider other)
