@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Profiling;
 using UnityEngine;
 
 namespace PlayingCube
@@ -16,6 +17,9 @@ namespace PlayingCube
         private List<CubeSide> _cubeSides;
         private Rigidbody _rigidbody;
         private Transform _transform;
+        private bool _isLandTouch;
+
+        private static ProfilerMarker _checkSideMarker;
 
         private void Start()
         {
@@ -34,6 +38,7 @@ namespace PlayingCube
 
         private void CheckCubeSide()
         {
+            _checkSideMarker.Begin();
             List<(CubeSide, float)> angles = new List<(CubeSide, float)>();
             foreach (var side in _cubeSides)
             {
@@ -44,13 +49,15 @@ namespace PlayingCube
                 angles.Add((side, Vector3.Angle(-sideForward, hit.normal)));
             }
             var sideWithMinAngle = angles.OrderBy(a => a.Item2).ToArray()[0].Item1;
+            _checkSideMarker.End();
             GlobalEventManager.SendOnPlayerMovementStart(sideWithMinAngle.SideNumber);
         }
 
         private void OnTriggerEnter(Collider other)
         {
-            if (!other.TryGetComponent(out Land _)) return;
+            if (!other.TryGetComponent(out Land _) || _isLandTouch) return;
             StartCoroutine(WaitCubeStop());
+            _isLandTouch = true;
         }
 
     }

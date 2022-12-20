@@ -12,6 +12,7 @@ public static class GlobalEventManager
         public static event Action<PlayerStats> OnPlayerFinished;
         public static event Action<PlayerStats> OnPlayerChanged;
         public static event Action OnAllPlayersFinished;
+        public static event Action OnCubeTouchNegativeZone;
         
         public static void SendOnStartButtonClick(List<string> names) => 
                 OnStartButtonClick?.Invoke(names);
@@ -36,4 +37,7 @@ public static class GlobalEventManager
         
         public static void SendOnAllPlayersFinished() => 
                 OnAllPlayersFinished?.Invoke();
+        public static void SendOnCubeTouchNegativeZone() =>
+                OnCubeTouchNegativeZone?.Invoke();
+        
 }

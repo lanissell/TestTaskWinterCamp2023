@@ -2,14 +2,16 @@ using UnityEngine;
 
 namespace Player
 {
-    [RequireComponent(typeof(PlayersCreator))]
+    [RequireComponent(typeof(PlayersCreator), typeof(AudioSource))]
     public class PlayersChanger : MonoBehaviour
     {
         private PlayersCreator _playersCreator;
         private int _currentPlayerIndex;
+        private AudioSource _audioSource;
 
         private void Start()
         {
+            _audioSource = GetComponent<AudioSource>();
             _playersCreator = GetComponent<PlayersCreator>();
             GlobalEventManager.OnPlayerStop += ChangeCurrentPlayer;
             GlobalEventManager.OnPlayerFinished += RemovePlayerFromList;
@@ -45,6 +47,7 @@ namespace Player
 
         private void RemovePlayerFromList(PlayerStats playerStats)
         {
+            _audioSource.Play();
             var players = _playersCreator.Players;  
             players.Remove(playerStats);
             _currentPlayerIndex--;

@@ -1,10 +1,11 @@
+using Sounds;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace PlayingCube
 {
+    [RequireComponent(typeof(RandomSoundPlayer))]
     public class CubeGun : MonoBehaviour
     {
         [SerializeField] 
@@ -13,33 +14,41 @@ namespace PlayingCube
         private float _minForce;
         [SerializeField] 
         private float _rotationForce;
-        [FormerlySerializedAs("_cubeSpawnPoint")] [SerializeField] 
+        [SerializeField] 
         private Transform[] _cubeSpawnPoints;
         [SerializeField] 
         private GameObject _cubePrefab;
-        private bool _isCanShoot;
         private GameObject _cube;
-
+        private RandomSoundPlayer _soundPlayer;
+        private bool _isCanShoot = true;
+   
         private void Start()
         {
-            _isCanShoot = true;
+            _soundPlayer = GetComponent<RandomSoundPlayer>();
             GlobalEventManager.OnAddingStepActive += SetCanShootTrue;
             GlobalEventManager.OnPlayerStop += SetCanShootTrue;
+            GlobalEventManager.OnCubeTouchNegativeZone += SetCanShootTrue;
             GlobalEventManager.OnAllPlayersFinished += DestroyGun;
         }
 
         private void Update()
         {
             if (!((Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space)) && _isCanShoot)) return;
-            if (!_cube.IsUnityNull()) Destroy(_cube.gameObject);
-            _isCanShoot = false;
             var spawnPoint = _cubeSpawnPoints[Random.Range(0, _cubeSpawnPoints.Length)];
-            _cube = Instantiate(_cubePrefab, spawnPoint.position, spawnPoint.rotation);
+            SpawnCube(spawnPoint);
             PushCube(spawnPoint.forward);
+        }
+
+        private void SpawnCube(Transform spawnPoint)
+        {
+            if (!_cube.IsUnityNull()) Destroy(_cube);
+            _isCanShoot = false;
+            _cube = Instantiate(_cubePrefab, spawnPoint.position, spawnPoint.rotation);
         }
 
         private void PushCube(Vector3 direction)
         {
+            _soundPlayer.PlayRandomSound();
             if (!_cube.TryGetComponent(out Rigidbody cubeRigidbody)) return;
             float force = Random.Range(_minForce, _maxForce);
             cubeRigidbody.AddForce(direction * force, ForceMode.VelocityChange);
@@ -48,11 +57,12 @@ namespace PlayingCube
         }
 
         private void SetCanShootTrue() => _isCanShoot = true;
-
+        
         private void DestroyGun()
         {
             GlobalEventManager.OnAddingStepActive -= SetCanShootTrue;
             GlobalEventManager.OnPlayerStop -= SetCanShootTrue;
+            GlobalEventManager.OnCubeTouchNegativeZone -= SetCanShootTrue;
             GlobalEventManager.OnAllPlayersFinished -= DestroyGun;
             Destroy(gameObject);
         }
