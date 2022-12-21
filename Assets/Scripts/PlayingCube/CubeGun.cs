@@ -33,7 +33,7 @@ namespace PlayingCube
 
         private void Update()
         {
-            if (!((Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space)) && _isCanShoot)) return;
+            if (!(Input.GetAxis("ThrowCube") == 1 && _isCanShoot)) return;
             var spawnPoint = _cubeSpawnPoints[Random.Range(0, _cubeSpawnPoints.Length)];
             SpawnCube(spawnPoint);
             PushCube(spawnPoint.forward);
